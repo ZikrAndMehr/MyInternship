@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">My Internship</string>
+
+    //activity_main
+    <string name="enter_number">Please enter a number between 5 and 20</string>
+    <string name="number">Number</string>
+    <string name="fetch_data">Fetch Data</string>
+
+    //MainActivity
+    <string name="number_null">Enter a number!</string>
+    <string name="number_range">Enter number in the range of 5 to 20!</string>
+    <string name="fetching">Fetching Data</string>
+</resources>
