@@ -13,6 +13,9 @@ import com.zam.myinternship.R;
 import com.zam.myinternship.model.CountryInfo;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class CountryInfoAdapter extends RecyclerView.Adapter<CountryInfoAdapter.InfoHolder> {
 
@@ -34,11 +37,19 @@ public class CountryInfoAdapter extends RecyclerView.Adapter<CountryInfoAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull CountryInfoAdapter.InfoHolder holder, int position) {
-        if (countriesInfo.get(position)!=null) {
-            CountryInfo countryInfo=countriesInfo.get(position);
-            holder.tvCountryName.setText(context.getString(R.string.country)+countryInfo.getName());
-            holder.tvCountryCapital.setText(context.getString(R.string.capital)+countryInfo.getCapital());
-            holder.tvCountryPopulation.setText(context.getString(R.string.population)+countryInfo.getPopulation().toString());
+        CountryInfo countryInfo=countriesInfo.get(position);
+        holder.tvCountryName.setText(context.getString(R.string.country)+countryInfo.getName());
+
+        if (countryInfo.getCapital()==null)  holder.tvCountryCapital.setText(context.getString(R.string.capital)+context.getString(R.string.not_found));
+        else  holder.tvCountryCapital.setText(context.getString(R.string.capital)+countryInfo.getCapital());
+
+        if (countryInfo.getPopulation()==0) holder.tvCountryPopulation.setText(context.getString(R.string.population)+context.getString(R.string.not_found));
+        else holder.tvCountryPopulation.setText(context.getString(R.string.population)+countryInfo.getPopulation().toString());
+
+        if (countryInfo.getLanguage()==null) {
+            holder.tvCountryLanguages.setText(context.getString(R.string.languages)+"\n"+context.getString(R.string.not_found));
+        }
+        else {
             holder.tvCountryLanguages.setText(
                     context.getString(R.string.languages)
                             +context.getString(R.string.iso_1)+countryInfo.getLanguage().get(0).getIso6391()
@@ -56,6 +67,12 @@ public class CountryInfoAdapter extends RecyclerView.Adapter<CountryInfoAdapter.
 
     public void updateAdapter(CountryInfo countryInfo) {
         countriesInfo.add(countryInfo);
+        Collections.sort(countriesInfo, new Comparator<CountryInfo>() {
+            @Override
+            public int compare(CountryInfo o1, CountryInfo o2) {
+                return o1.getPopulation().compareTo(o2.getPopulation())*-1;
+            }
+        });
         notifyDataSetChanged();
     }
 

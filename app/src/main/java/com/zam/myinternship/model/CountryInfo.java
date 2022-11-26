@@ -31,7 +31,7 @@ public class CountryInfo {
         return languages;
     }
 
-    public class Language {
+    public static class Language {
         private String iso639_1;
         private String iso639_2;
         private String name;
