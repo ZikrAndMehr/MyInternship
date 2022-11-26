@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -21,12 +22,14 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final String BASE_URL="https://random-data-api.com/api/";
+
     private LinearLayout llMain;
     private TextInputLayout tilNumber;
     private EditText etNumber;
     private Button bFetchData;
-    private int number;
     private TextView tvData;
+    private int number=5;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,36 +62,34 @@ public class MainActivity extends AppCompatActivity {
 
     private void fetchData() {
 
-        if (5<=number && number<=20) {
-            Toast.makeText(this, R.string.fetching, Toast.LENGTH_SHORT).show();
-            tilNumber.setErrorEnabled(false);
-        }
+        Toast.makeText(this, R.string.fetching, Toast.LENGTH_SHORT).show();
+        tilNumber.setErrorEnabled(false);
 
         Retrofit retrofit=new Retrofit.Builder()
-                .baseUrl(MyAPI.BASE_URL)
+                .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
         MyAPI myAPI=retrofit.create(MyAPI.class);
 
-        Call<List<RandomAddress>> call=myAPI.getRandomAddresses();
+        Call<ArrayList<RandomAddress>> call=myAPI.getRandomAddresses(BASE_URL+"address/random_address?size="+number);
 
-        call.enqueue(new Callback<List<RandomAddress>>() {
+        call.enqueue(new Callback<ArrayList<RandomAddress>>() {
             @Override
-            public void onResponse(Call<List<RandomAddress>> call, Response<List<RandomAddress>> response) {
+            public void onResponse(Call<ArrayList<RandomAddress>> call, Response<ArrayList<RandomAddress>> response) {
                 List<RandomAddress> addresses=response.body();
 
                 String s="";
 
                 for (int i=0; i<addresses.size(); i++) {
-                    s+=addresses.get(i).getCountry()+"\n";
+                    s+=(i+1)+" "+addresses.get(i).getCountry()+"\n";
                 }
 
                 tvData.setText(s);
             }
 
             @Override
-            public void onFailure(Call<List<RandomAddress>> call, Throwable t) {
+            public void onFailure(Call<ArrayList<RandomAddress>> call, Throwable t) {
                 Toast.makeText(MainActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
                 tvData.setText(t.getMessage());
             }
