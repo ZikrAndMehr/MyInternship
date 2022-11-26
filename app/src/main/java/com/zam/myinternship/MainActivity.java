@@ -1,18 +1,19 @@
 package com.zam.myinternship;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -27,8 +28,8 @@ public class MainActivity extends AppCompatActivity {
     private LinearLayout llMain;
     private TextInputLayout tilNumber;
     private EditText etNumber;
-    private Button bFetchData;
-    private TextView tvData;
+    private Button bFetchData, bInfo;
+    private RecyclerView rvMain;
     private int number=5;
 
     @Override
@@ -40,11 +41,14 @@ public class MainActivity extends AppCompatActivity {
         tilNumber=findViewById(R.id.til_number);
         etNumber=findViewById(R.id.et_number);
         bFetchData=findViewById(R.id.b_fetch_data);
-        tvData=findViewById(R.id.tv_data);
+        rvMain=findViewById(R.id.rv_main);
+        bInfo=findViewById(R.id.b_info);
 
         bFetchData.setOnClickListener(v -> {
             if (checkNumberRange()) fetchData();
         });
+
+        rvMain.setLayoutManager(new LinearLayoutManager(this));
     }
 
     private boolean checkNumberRange() {
@@ -77,21 +81,16 @@ public class MainActivity extends AppCompatActivity {
         call.enqueue(new Callback<ArrayList<RandomAddress>>() {
             @Override
             public void onResponse(Call<ArrayList<RandomAddress>> call, Response<ArrayList<RandomAddress>> response) {
-                List<RandomAddress> addresses=response.body();
+                ArrayList<RandomAddress> addresses=response.body();
+                MyAdapter myAdapter=new MyAdapter(addresses);
+                rvMain.setAdapter(myAdapter);
 
-                String s="";
-
-                for (int i=0; i<addresses.size(); i++) {
-                    s+=(i+1)+" "+addresses.get(i).getCountry()+"\n";
-                }
-
-                tvData.setText(s);
+                bInfo.setVisibility(View.VISIBLE);
             }
 
             @Override
             public void onFailure(Call<ArrayList<RandomAddress>> call, Throwable t) {
                 Toast.makeText(MainActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
-                tvData.setText(t.getMessage());
             }
         });
     }

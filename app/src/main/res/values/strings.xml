@@ -5,6 +5,7 @@
     <string name="enter_number">Please enter a number between 5 and 20</string>
     <string name="number">Number</string>
     <string name="fetch_data">Fetch Data</string>
+    <string name="show_info">Countries information</string>
 
     //MainActivity
     <string name="number_null">Enter a number!</string>
