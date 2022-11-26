@@ -1,4 +1,4 @@
-package com.zam.myinternship;
+package com.zam.myinternship.model;
 
 public class RandomAddress {
 

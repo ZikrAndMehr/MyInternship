@@ -1,15 +1,14 @@
-package com.zam.myinternship;
+package com.zam.myinternship.api;
+
+import com.zam.myinternship.model.RandomAddress;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
-import retrofit2.http.POST;
-import retrofit2.http.Path;
 import retrofit2.http.Url;
 
-public interface MyAPI {
+public interface RandomAddressAPI {
     @GET
     Call<ArrayList<RandomAddress>> getRandomAddresses(@Url String url);
 }

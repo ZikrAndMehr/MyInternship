@@ -11,4 +11,7 @@
     <string name="number_null">Enter a number!</string>
     <string name="number_range">Enter number in the range of 5 to 20!</string>
     <string name="fetching">Fetching Data</string>
+
+    //CountryInfoActivity
+    <string name="not_found">No information found!</string>
 </resources>
