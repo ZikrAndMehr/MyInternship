@@ -1,10 +1,13 @@
 package com.zam.myinternship;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
-import android.widget.TextView;
+import android.widget.Toast;
 
+import com.zam.myinternship.adapter.CountryInfoAdapter;
 import com.zam.myinternship.api.CountryInfoAPI;
 import com.zam.myinternship.model.CountryInfo;
 
@@ -18,21 +21,25 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class CountryInfoActivity extends AppCompatActivity {
 
-    private TextView tvInfo;
+    private RecyclerView rvInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_info);
 
-        tvInfo=findViewById(R.id.tv_info);
+        rvInfo=findViewById(R.id.rv_info);
 
-        showInfo();
+        rvInfo.setLayoutManager(new LinearLayoutManager(this));
+
+        getInfo();
     }
 
-    private void showInfo() {
+    private void getInfo() {
 
         String[] add=getIntent().getStringArrayExtra("ADDRESSES");
+        ArrayList<CountryInfo> countriesInfo= new ArrayList<>();
+        CountryInfoAdapter countryInfoAdapter=new CountryInfoAdapter(this,countriesInfo);
 
         Retrofit retrofit=new Retrofit.Builder()
                 .baseUrl("https://restcountries.com/")
@@ -42,32 +49,23 @@ public class CountryInfoActivity extends AppCompatActivity {
         CountryInfoAPI countryInfoAPI=retrofit.create(CountryInfoAPI.class);
 
         for (int i=0; i<add.length; i++) {
-            tvInfo.setText(tvInfo.getText()+" "+ i +" ");
             Call<ArrayList<CountryInfo>> call=countryInfoAPI
-                    .getRandomAddresses("https://restcountries.com/v2/name/"+add[i]+"?fields=name,capital,population");
+                    .getCountryInfo("https://restcountries.com/v2/name/"+add[i]+"?fields=name,capital,population,languages");
 
-            call.enqueue(new Callback<ArrayList<CountryInfo>>() {
+           call.enqueue(new Callback<ArrayList<CountryInfo>>() {
                 @Override
                 public void onResponse(Call<ArrayList<CountryInfo>> call, Response<ArrayList<CountryInfo>> response) {
-                    if (!response.isSuccessful()) tvInfo.setText(tvInfo.getText()+"\n"+getString(R.string.not_found));
-                    else {
-                        ArrayList<CountryInfo> ans=response.body();
-                        for (int i=0; i<ans.size(); i++) {
-                            if (ans.get(i)==null) tvInfo.setText(tvInfo.getText()+"Country Not Found");
-                            else {
-
-                                tvInfo.setText(tvInfo.getText()+"\n"+ans.get(i).getName()+" "+ans.get(i).getCapital()+" "+ans.get(i).getPopulation());
-                            }
-                        }
-                    }
+                    if (response.isSuccessful()) countryInfoAdapter.updateAdapter(response.body().get(0));
+                    else countriesInfo.add(null);
                 }
 
                 @Override
                 public void onFailure(Call<ArrayList<CountryInfo>> call, Throwable t) {
-                    tvInfo.setText(t.getMessage());
+                    Toast.makeText(CountryInfoActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             });
-
         }
+
+        rvInfo.setAdapter(countryInfoAdapter);
     }
 }

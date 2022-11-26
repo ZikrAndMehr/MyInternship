@@ -10,5 +10,5 @@ import retrofit2.http.Url;
 
 public interface CountryInfoAPI {
     @GET
-    Call<ArrayList<CountryInfo>> getRandomAddresses(@Url String url);
+    Call<ArrayList<CountryInfo>> getCountryInfo(@Url String url);
 }

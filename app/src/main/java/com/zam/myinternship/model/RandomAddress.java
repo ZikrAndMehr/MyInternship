@@ -40,28 +40,4 @@ public class RandomAddress {
     public String getCountry() {
         return country;
     }
-
-    /*"id": 6062,
-            "uid": "f4bc181a-f15a-46a8-99e4-c88987b3e226",
-            "city": "Domingochester",
-            "street_name": "Merle Port",
-            "street_address": "5644 Hermann Circle",
-            "secondary_address": "Apt. 721",
-            "building_number": "43156",
-            "mail_box": "PO Box 93",
-            "community": "University Gardens",
-            "zip_code": "16071",
-            "zip": "69258",
-            "postcode": "42904-2827",
-            "time_zone": "America/Sao_Paulo",
-            "street_suffix": "Parkway",
-            "city_suffix": "furt",
-            "city_prefix": "East",
-            "state": "Oregon",
-            "state_abbr": "NH",
-            "country": "Israel",
-            "country_code": "CI",
-            "latitude": -63.38313110801433,
-            "longitude": -70.66482816724893,
-            "full_address": "Apt. 315 570 Whitley Wall, Timothytown, DE 76722"*/
 }
