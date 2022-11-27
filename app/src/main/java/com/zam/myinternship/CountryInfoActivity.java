@@ -31,14 +31,17 @@ public class CountryInfoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_info);
 
+        //getting references to UI views
         toolbar=findViewById(R.id.toolbar);
         rvInfo=findViewById(R.id.rv_info);
 
+        //setting toolbar and enabling going back to parent activity
         toolbar.setTitle(R.string.show_info);
         toolbar.setNavigationIcon(R.drawable.ic_back);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        //giving layout manager to recyclerview
         rvInfo.setLayoutManager(new LinearLayoutManager(this));
 
         getInfo();
@@ -46,6 +49,7 @@ public class CountryInfoActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        //finish activity when 'up' button in toolbar clicked
         finish();
         return true;
     }
@@ -55,6 +59,8 @@ public class CountryInfoActivity extends AppCompatActivity {
         ArrayList<CountryInfo> countriesInfo= new ArrayList<>();
         CountryInfoAdapter countryInfoAdapter=new CountryInfoAdapter(this,countriesInfo);
 
+        /*instantiating the retrofit and passing all the necessary arguments and requesting required amount of data in the body of for loop
+        and getting response inside body of for loop in call.enqueue method */
         Retrofit retrofit=new Retrofit.Builder()
                 .baseUrl("https://restcountries.com/")
                 .addConverterFactory(GsonConverterFactory.create())
@@ -70,6 +76,7 @@ public class CountryInfoActivity extends AppCompatActivity {
             call.enqueue(new Callback<ArrayList<CountryInfo>>() {
                 @Override
                 public void onResponse(Call<ArrayList<CountryInfo>> call, Response<ArrayList<CountryInfo>> response) {
+                    //if response is successful get response and update adapter of the recyclerview or update with 'default' values
                     if (response.isSuccessful()) countryInfoAdapter.updateAdapter(response.body().get(0));
                     else {
                         String sNotFound=getString(R.string.not_found);

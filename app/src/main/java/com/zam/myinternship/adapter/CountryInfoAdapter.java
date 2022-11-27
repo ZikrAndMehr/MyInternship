@@ -13,7 +13,6 @@ import com.zam.myinternship.R;
 import com.zam.myinternship.model.CountryInfo;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 
@@ -67,10 +66,12 @@ public class CountryInfoAdapter extends RecyclerView.Adapter<CountryInfoAdapter.
     }
 
     public void updateAdapter(CountryInfo countryInfo) {
+        //get new countryInfo and add to 'countriesInfo' and sort in descending order
         countriesInfo.add(countryInfo);
         Collections.sort(countriesInfo, new Comparator<CountryInfo>() {
             @Override
             public int compare(CountryInfo o1, CountryInfo o2) {
+                // '*-1' to be able to sort in descending order
                 return o1.getPopulation().compareTo(o2.getPopulation())*-1;
             }
         });
