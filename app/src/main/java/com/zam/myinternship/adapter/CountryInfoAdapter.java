@@ -38,21 +38,22 @@ public class CountryInfoAdapter extends RecyclerView.Adapter<CountryInfoAdapter.
     @Override
     public void onBindViewHolder(@NonNull CountryInfoAdapter.InfoHolder holder, int position) {
         CountryInfo countryInfo=countriesInfo.get(position);
-        holder.tvCountryName.setText(context.getString(R.string.country)+countryInfo.getName());
 
-        if (countryInfo.getCapital()==null)  holder.tvCountryCapital.setText(context.getString(R.string.capital)+context.getString(R.string.not_found));
-        else  holder.tvCountryCapital.setText(context.getString(R.string.capital)+countryInfo.getCapital());
+        holder.tvPosition.setText(String.valueOf(position+1));
 
-        if (countryInfo.getPopulation()==0) holder.tvCountryPopulation.setText(context.getString(R.string.population)+context.getString(R.string.not_found));
-        else holder.tvCountryPopulation.setText(context.getString(R.string.population)+countryInfo.getPopulation().toString());
+        holder.tvCountryName.setText(countryInfo.getName());
+
+        if (countryInfo.getCapital()==null)  holder.tvCountryCapital.setText(context.getString(R.string.not_found));
+        else  holder.tvCountryCapital.setText(countryInfo.getCapital());
+
+        if (countryInfo.getPopulation()==0) holder.tvCountryPopulation.setText(context.getString(R.string.not_found));
+        else holder.tvCountryPopulation.setText(countryInfo.getPopulation().toString());
 
         if (countryInfo.getLanguage()==null) {
-            holder.tvCountryLanguages.setText(context.getString(R.string.languages)+"\n"+context.getString(R.string.not_found));
+            holder.tvCountryLanguages.setText(context.getString(R.string.not_found));
         }
         else {
-            holder.tvCountryLanguages.setText(
-                    context.getString(R.string.languages)
-                            +context.getString(R.string.iso_1)+countryInfo.getLanguage().get(0).getIso6391()
+            holder.tvCountryLanguages.setText(context.getString(R.string.iso_1)+countryInfo.getLanguage().get(0).getIso6391()
                             +context.getString(R.string.iso_2)+countryInfo.getLanguage().get(0).getIso6392()
                             +context.getString(R.string.name)+countryInfo.getLanguage().get(0).getName()
                             +context.getString(R.string.native_name)+countryInfo.getLanguage().get(0).getNativeName()
@@ -78,10 +79,11 @@ public class CountryInfoAdapter extends RecyclerView.Adapter<CountryInfoAdapter.
 
     public class InfoHolder extends RecyclerView.ViewHolder{
 
-        TextView tvCountryName, tvCountryCapital, tvCountryPopulation, tvCountryLanguages;
+        TextView tvPosition, tvCountryName, tvCountryCapital, tvCountryPopulation, tvCountryLanguages;
 
         public InfoHolder(@NonNull View itemView) {
             super(itemView);
+            tvPosition=itemView.findViewById(R.id.tv_position);
             tvCountryName=itemView.findViewById(R.id.tv_country_name);
             tvCountryCapital=itemView.findViewById(R.id.tv_country_capital);
             tvCountryPopulation=itemView.findViewById(R.id.tv_country_population);
